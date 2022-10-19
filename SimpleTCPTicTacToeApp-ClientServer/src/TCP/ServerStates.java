@@ -3,6 +3,8 @@ package TCP;
 public enum ServerStates {
     HOLDING,
     SIDESELECTION,
-    PLAYERSELECTION,
-    PLAYING
+    TURNASSIGN,
+    PLAYING,
+
+    RESULTING
 }
