@@ -36,10 +36,10 @@ public class TTTServer {
             }while (state == ServerStates.HOLDING);
 
             do{
-                System.out.println(Instructions.INSTRUCTION_FOR_SELECTING_SIDE);
 
                 String serverChar;
                 do{
+                    System.out.println(Instructions.INSTRUCTION_FOR_SELECTING_SIDE);
                     serverChar = scanner.nextLine();
                 }while(!serverChar.equalsIgnoreCase("X") && !serverChar.equalsIgnoreCase("O"));
 

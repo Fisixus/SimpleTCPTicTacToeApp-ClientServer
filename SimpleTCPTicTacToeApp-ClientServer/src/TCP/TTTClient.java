@@ -25,9 +25,9 @@ public class TTTClient {
         String receivedStr = TCPSendReceive.GetString(readerString, data);
 
         if(receivedStr.equals(Instructions.INSTRUCTION_FOR_SELECTING_SIDE)){
-            System.out.println(receivedStr);
             String clientChar;
             do{
+                System.out.println(receivedStr);
                 clientChar = scanner.nextLine();
             }while(!clientChar.equalsIgnoreCase("X") && !clientChar.equalsIgnoreCase("O"));
             TCPSendReceive.SendString(writer, clientChar);
