@@ -20,7 +20,7 @@ public class TTTServer {
         server = new ServerSocket(port);
         TicTacToe ttt = new TicTacToe();
 
-        while (true) {
+        //while (true) {
             Socket socket = server.accept();
             Reader readerString = new InputStreamReader(socket.getInputStream());
             Writer writer = new OutputStreamWriter(socket.getOutputStream());
@@ -79,25 +79,63 @@ public class TTTServer {
                 break;
             }while (state == ServerStates.TURNASSIGN);
 
-
+            PlayerTypes winnerType;
             do{
                 if(isServerGoingToStart){
                     ServerPlay(scanner ,ttt, writer);
+                    System.out.println(ttt.GetBoard2D());
+                    winnerType = ttt.CalculateWinnerCondition();
+                    if(winnerType != null){
+                        state = ServerStates.RESULTING;
+                        TCPSendReceive.SendString(writer,  "FIN!");
+                        data = new char[1024];
+                        String xx = TCPSendReceive.GetString(readerString,data);
+                        TCPSendReceive.SendString(writer,  ttt.GetBoard2D());
+                        break;
+                    }
+
                     ClientPlay(scanner, ttt, writer, readerString);
+                    TCPSendReceive.SendString(writer, ttt.GetBoard2D());
+                    winnerType = ttt.CalculateWinnerCondition();
+                    if(winnerType != null){
+                        state = ServerStates.RESULTING;
+                        TCPSendReceive.SendString(writer,  "FIN!");
+                        System.out.println(ttt.GetBoard2D());
+                        break;
+                    }
+
                 }
                 else{
                     ClientPlay(scanner, ttt, writer, readerString);
+                    TCPSendReceive.SendString(writer, ttt.GetBoard2D());
+                    winnerType = ttt.CalculateWinnerCondition();
+                    if(winnerType != null){
+                        state = ServerStates.RESULTING;
+                        TCPSendReceive.SendString(writer,  "FIN!");
+                        System.out.println(ttt.GetBoard2D());
+                        break;
+                    }
+
                     ServerPlay(scanner ,ttt, writer);
+                    System.out.println(ttt.GetBoard2D());
+                    winnerType = ttt.CalculateWinnerCondition();
+                    if(winnerType != null){
+                        state = ServerStates.RESULTING;
+                        TCPSendReceive.SendString(writer,  "FIN!");
+                        data = new char[1024];
+                        String xx = TCPSendReceive.GetString(readerString,data);
+                        TCPSendReceive.SendString(writer,  ttt.GetBoard2D());
+                        break;
+                    }
                 }
             }while (state == ServerStates.PLAYING);
 
-            //System.out.println(Instructions.PrintSides(serverChar,receivedChar));
-            //TCPSendReceive.SendString(writer, Instructions.PrintSides(serverChar,receivedChar));
+            writer.close();
+            readerString.close();
+            socket.close();
+            System.out.println("Server FIN!");
 
-            //writer.close();
-            //readerString.close();
-            //socket.close();
-        }
+        //}
     }
 
     private void ClientPlay(Scanner scanner, TicTacToe t, Writer writer, Reader readerString) throws IOException {
@@ -107,6 +145,9 @@ public class TTTServer {
             char[] data = new char[1024];
             String receivedCoordinate = TCPSendReceive.GetString(readerString,data);
             isMoveLegal  = MakeAMove(scanner, t, receivedCoordinate, PlayerTypes.Client);
+            //if(!isMoveLegal){
+                //TCPSendReceive.SendString(writer, "Wrong Input!\n");
+            //}
         }while(!isMoveLegal);
     }
 

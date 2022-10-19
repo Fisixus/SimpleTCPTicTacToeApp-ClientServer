@@ -17,4 +17,7 @@ public class Player {
     public GameElements GetSide(){
         return side;
     }
+    public PlayerTypes GetPlayerType(){
+        return playerType;
+    }
 }

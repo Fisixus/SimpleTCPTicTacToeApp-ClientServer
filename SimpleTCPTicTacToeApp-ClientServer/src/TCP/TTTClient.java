@@ -17,7 +17,6 @@ public class TTTClient {
         Scanner scanner = new Scanner(System.in);
 
         Reader readerString = new InputStreamReader(socket.getInputStream());
-        DataInputStream readerNumber = new DataInputStream(socket.getInputStream());
         Writer writer = new OutputStreamWriter(socket.getOutputStream());
 
         TCPSendReceive.SendString(writer, "Ready For TicTacToe!");
@@ -45,26 +44,40 @@ public class TTTClient {
         while (true){
             data = new char[1024];
             receivedStr = TCPSendReceive.GetString(readerString, data);
-            if(receivedStr.equalsIgnoreCase("FIN!")){
-                //TODO
+
+            if(receivedStr.contains("FIN!")){
+                TCPSendReceive.SendString(writer, "FIN!");
+                data = new char[1024];
+                receivedStr = TCPSendReceive.GetString(readerString, data);
+                System.out.println(receivedStr);
                 break;
             }
+
             System.out.println(receivedStr);
             String coordinate = scanner.nextLine();
             TCPSendReceive.SendString(writer, coordinate);
-        }
+
+            data = new char[1024];
+            receivedStr = TCPSendReceive.GetString(readerString, data);
+
             /*
-            numberOfReadCharacters = readerString.read(data, 0, 1024);
-            if (numberOfReadCharacters == -1) {
+            if(receivedStr.contains("coordinate!")){
+                System.out.println(receivedStr);
+                coordinate = scanner.nextLine();
+                TCPSendReceive.SendString(writer, coordinate);
+            }
+            */
+            if(receivedStr.contains("FIN!")){
                 break;
             }
-            if (numberOfReadCharacters > 0) {
-                String str = new String(data, 0, numberOfReadCharacters);
-                System.out.println(str);
-                break;
-            }
-             */
+
+            System.out.println(receivedStr);
+        }
+
+        writer.close();
+        readerString.close();
         socket.close();
+        System.out.println("FINITO!");
     }
 
     public static void main(String[] args) throws IOException {

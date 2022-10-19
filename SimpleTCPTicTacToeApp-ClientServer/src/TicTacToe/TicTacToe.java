@@ -38,7 +38,8 @@ public class TicTacToe {
     }
 
     public boolean IsServerGoingToStart(){
-        return (int) ( Math.random() * 2 + 1) == 1; // will return either 1 or 2
+        //return false;
+       return (int) ( Math.random() * 2 + 1) == 1; // will return either 1 or 2
     }
     /*
     public String ChooseSides(){
@@ -58,6 +59,9 @@ public class TicTacToe {
         if (board.boardArr[i][j] != GameElements.None.GetValue()) {
             return false;
         }
+        if(i > 2 || i < 0 || j > 2 || j<0){
+            return false;
+        }
 
         Player p = null;
         if(type == PlayerTypes.Server){
@@ -75,27 +79,57 @@ public class TicTacToe {
         return board.GetBoard2D();
     }
 
-    public Player CalculateWinnerCondition(GameElements element){
-        if((board.boardArr[0][0] == element.GetValue() && board.boardArr[0][1] == element.GetValue() && board.boardArr[0][2] == element.GetValue())
+    public PlayerTypes CalculateWinnerCondition(){
+        if((board.boardArr[0][0] == GameElements.X.GetValue() && board.boardArr[0][1] == GameElements.X.GetValue() && board.boardArr[0][2] == GameElements.X.GetValue())
             ||
-            (board.boardArr[0][0] == element.GetValue() && board.boardArr[1][0] == element.GetValue() && board.boardArr[2][0] == element.GetValue())
+            (board.boardArr[0][0] == GameElements.X.GetValue() && board.boardArr[1][0] == GameElements.X.GetValue() && board.boardArr[2][0] == GameElements.X.GetValue())
             ||
-            (board.boardArr[0][0] == element.GetValue() && board.boardArr[1][1] == element.GetValue() && board.boardArr[2][2] == element.GetValue())
+            (board.boardArr[0][0] == GameElements.X.GetValue() && board.boardArr[1][1] == GameElements.X.GetValue() && board.boardArr[2][2] == GameElements.X.GetValue())
             ||
-            (board.boardArr[0][1] == element.GetValue() && board.boardArr[1][1] == element.GetValue() && board.boardArr[2][1] == element.GetValue())
+            (board.boardArr[0][1] == GameElements.X.GetValue() && board.boardArr[1][1] == GameElements.X.GetValue() && board.boardArr[2][1] == GameElements.X.GetValue())
             ||
-            (board.boardArr[0][2] == element.GetValue() && board.boardArr[1][2] == element.GetValue() && board.boardArr[2][2] == element.GetValue())
+            (board.boardArr[0][2] == GameElements.X.GetValue() && board.boardArr[1][2] == GameElements.X.GetValue() && board.boardArr[2][2] == GameElements.X.GetValue())
             ||
-            (board.boardArr[1][0] == element.GetValue() && board.boardArr[1][1] == element.GetValue() && board.boardArr[1][2] == element.GetValue())
+            (board.boardArr[1][0] == GameElements.X.GetValue() && board.boardArr[1][1] == GameElements.X.GetValue() && board.boardArr[1][2] == GameElements.X.GetValue())
             ||
-            (board.boardArr[2][0] == element.GetValue() && board.boardArr[2][1] == element.GetValue() && board.boardArr[2][2] == element.GetValue())
+            (board.boardArr[2][0] == GameElements.X.GetValue() && board.boardArr[2][1] == GameElements.X.GetValue() && board.boardArr[2][2] == GameElements.X.GetValue())
             ||
-            (board.boardArr[0][2] == element.GetValue() && board.boardArr[1][1] == element.GetValue() && board.boardArr[2][0] == element.GetValue())
+            (board.boardArr[0][2] == GameElements.X.GetValue() && board.boardArr[1][1] == GameElements.X.GetValue() && board.boardArr[2][0] == GameElements.X.GetValue())
         ){
-            if(playerServer.GetSide() == element){
-                return playerServer;
+            if(playerServer.GetSide() == GameElements.X){
+                return playerServer.GetPlayerType();
+            }
+            else if(playerClient.GetSide() == GameElements.X){
+                return playerClient.GetPlayerType();
             }
 
+        }
+        else if((board.boardArr[0][0] == GameElements.O.GetValue() && board.boardArr[0][1] == GameElements.O.GetValue() && board.boardArr[0][2] == GameElements.O.GetValue())
+                ||
+                (board.boardArr[0][0] == GameElements.O.GetValue() && board.boardArr[1][0] == GameElements.O.GetValue() && board.boardArr[2][0] == GameElements.O.GetValue())
+                ||
+                (board.boardArr[0][0] == GameElements.O.GetValue() && board.boardArr[1][1] == GameElements.O.GetValue() && board.boardArr[2][2] == GameElements.O.GetValue())
+                ||
+                (board.boardArr[0][1] == GameElements.O.GetValue() && board.boardArr[1][1] == GameElements.O.GetValue() && board.boardArr[2][1] == GameElements.O.GetValue())
+                ||
+                (board.boardArr[0][2] == GameElements.O.GetValue() && board.boardArr[1][2] == GameElements.O.GetValue() && board.boardArr[2][2] == GameElements.O.GetValue())
+                ||
+                (board.boardArr[1][0] == GameElements.O.GetValue() && board.boardArr[1][1] == GameElements.O.GetValue() && board.boardArr[1][2] == GameElements.O.GetValue())
+                ||
+                (board.boardArr[2][0] == GameElements.O.GetValue() && board.boardArr[2][1] == GameElements.O.GetValue() && board.boardArr[2][2] == GameElements.O.GetValue())
+                ||
+                (board.boardArr[0][2] == GameElements.O.GetValue() && board.boardArr[1][1] == GameElements.O.GetValue() && board.boardArr[2][0] == GameElements.O.GetValue())
+        ){
+            if(playerServer.GetSide() == GameElements.O){
+                return playerServer.GetPlayerType();
+            }
+            else if(playerClient.GetSide() == GameElements.O){
+                return playerClient.GetPlayerType();
+            }
+
+        }
+        else if (board.IsBoardFull()) {
+            return PlayerTypes.None;
         }
 
         return  null;
@@ -133,6 +167,17 @@ public class TicTacToe {
                 return;
             }
             boardArr[i][j] = newMove;
+        }
+
+        public boolean IsBoardFull(){
+            for(int i = 0; i < x; i++) {
+                for (int j = 0; j < y; j++) {
+                    if(boardArr[i][j] == GameElements.None.GetValue()){
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         public String GetBoard2D(){
