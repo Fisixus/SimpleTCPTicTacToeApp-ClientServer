@@ -146,12 +146,20 @@ public class TTTServer {
         boolean isMoveLegal = false;
         do{
             TCPSendReceive.SendString(writer, Instructions.INSTRUCTION_FOR_COORDINATE + "\n" + t.GetBoard2D());
+
             char[] data = new char[1024];
             String receivedCoordinate = TCPSendReceive.GetString(readerString,data);
             isMoveLegal  = MakeAMove(scanner, t, receivedCoordinate, PlayerTypes.Client);
-            //if(!isMoveLegal){
-                //TCPSendReceive.SendString(writer, "Wrong Input!\n");
-            //}
+            if(!isMoveLegal){
+                TCPSendReceive.SendString(writer, "WrongInput");
+                data = new char[1024];
+                TCPSendReceive.GetString(readerString,data);
+            }
+            else {
+                TCPSendReceive.SendString(writer, "TrueInput");
+                data = new char[1024];
+                TCPSendReceive.GetString(readerString,data);
+            }
         }while(!isMoveLegal);
     }
 

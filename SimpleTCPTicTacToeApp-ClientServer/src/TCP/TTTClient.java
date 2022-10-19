@@ -59,6 +59,17 @@ public class TTTClient {
 
             data = new char[1024];
             receivedStr = TCPSendReceive.GetString(readerString, data);
+            if(receivedStr.contains("WrongInput")){
+                TCPSendReceive.SendString(writer, "WRONG!!");
+                continue;
+            }
+            else{
+                TCPSendReceive.SendString(writer, "TRUE!!");
+            }
+
+
+            data = new char[1024];
+            receivedStr = TCPSendReceive.GetString(readerString, data);
 
             /*
             if(receivedStr.contains("coordinate!")){

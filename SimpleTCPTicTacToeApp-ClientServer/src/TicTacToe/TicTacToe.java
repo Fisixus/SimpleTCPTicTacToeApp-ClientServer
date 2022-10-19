@@ -39,8 +39,8 @@ public class TicTacToe {
     }
 
     public boolean IsServerGoingToStart(){
-        //return false;
-       return (int) ( Math.random() * 2 + 1) == 1; // will return either 1 or 2
+        return true;
+       //return (int) ( Math.random() * 2 + 1) == 1; // will return either 1 or 2
     }
     /*
     public String ChooseSides(){
