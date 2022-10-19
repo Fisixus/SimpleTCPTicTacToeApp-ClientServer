@@ -19,4 +19,11 @@ public class Instructions {
         return startingSide + " is going to start the game!";
     }
 
+    public static String PrintWinner(String winner){
+        if(winner.equalsIgnoreCase("none")){
+            return "Game Result:TIE!";
+        }
+        return "Game Result:" + winner + " is the winner!";
+    }
+
 }

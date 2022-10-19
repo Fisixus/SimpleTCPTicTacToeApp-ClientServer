@@ -130,10 +130,14 @@ public class TTTServer {
                 }
             }while (state == ServerStates.PLAYING);
 
+            System.out.println(ttt.AnnounceResult(winnerType));
+            TCPSendReceive.SendString(writer, ttt.AnnounceResult(winnerType));
+            data = new char[1024];
+            String lastCheck = TCPSendReceive.GetString(readerString,data);
+
             writer.close();
             readerString.close();
             socket.close();
-            System.out.println("Server FIN!");
 
         //}
     }

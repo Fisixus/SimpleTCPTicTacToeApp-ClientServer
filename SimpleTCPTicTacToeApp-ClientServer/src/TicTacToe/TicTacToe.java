@@ -1,5 +1,6 @@
 package TicTacToe;
 
+import Utility.Instructions;
 import Utility.PlayerTypes;
 
 public class TicTacToe {
@@ -54,8 +55,13 @@ public class TicTacToe {
         }
         return Instructions.InstructionForSides(playerServer,playerClient);
     }
+
 */
-    public boolean Play(PlayerTypes type, int i, int j){
+        public String AnnounceResult(PlayerTypes t) {
+            return Instructions.PrintWinner(t.name());
+        }
+
+        public boolean Play(PlayerTypes type, int i, int j){
         if (board.boardArr[i][j] != GameElements.None.GetValue()) {
             return false;
         }

@@ -74,10 +74,15 @@ public class TTTClient {
             System.out.println(receivedStr);
         }
 
+        data = new char[1024];
+        String winnerMes = TCPSendReceive.GetString(readerString,data);
+        System.out.println(winnerMes);
+        TCPSendReceive.SendString(writer, "Message Taken!");
+
+
         writer.close();
         readerString.close();
         socket.close();
-        System.out.println("FINITO!");
     }
 
     public static void main(String[] args) throws IOException {
